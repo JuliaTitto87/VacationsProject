@@ -1,0 +1,84 @@
+﻿@using MyVacationsProject.Controllers
+@using Vacations_DomainModel.Models.Vacation
+@model PartOfVacation
+<style type="text/css">
+    .brd {
+        border: 1px;
+        padding: 10px;
+        color: dodgerblue;
+    }
+
+    th {
+        width: 25%;
+    }
+</style>
+    
+<h4>Регистрация отпуска</h4>
+@using (Html.BeginForm(
+actionName: nameof(VacationsController.Create),
+controllerName: Html.ViewContext.RouteData.Values["controller"].ToString(),
+FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.VacationId)
+ 
+    <div class="col-md-12">
+        <div class="col-md-3 brd " style="border:solid">
+        <div class="row" >
+            <h5 class="col-md-6 col-md-offset-2"> <label > Работник @ViewBag.NameOfEmployee</label></h5>
+        </div>
+        <div class="row">
+            <h5 class="col-md-6 col-md-offset-2"> <label > Продолжительность отпуска @ViewBag.DurationOfVocation дня</label></h5>
+            </div>
+        </div>
+        <div>
+            <table>
+               
+                <tr>
+                    <td><h5 class ="form-label">  Начало отпуска  </h5></td>
+                    <td><h5 class ="form-label">  Конец отпуска  </h5></td>
+                    <td><h5 class="form-label">   Продолжительность  </h5></td>
+                    <td><p>  </p></td>
+                </tr>
+
+                @foreach (var m in ViewBag.PartsOfVacation)
+                {
+                    <tr>
+                        <td><p class="form-label">@m.DateStart.ToString("dd/MM/yyyy")</p></td>
+                        <td><p class="form-label">@m.DateEnd.ToString("dd/MM/yyyy")</p></td>
+                        <td><h5 class="form-label">@m.DurationOfVacationPart</h5></td>
+                        <td><input type="submit" asp-action="DeletePartOfVacation" value="Удалить" asp-route-id="@m.Id" /> </td>
+                    </tr>
+                }
+            </table>
+            <div >
+                @{
+                    int duration = 0;
+                    int add = 0;
+                    foreach (PartOfVacation m in ViewBag.PartsOfVacation)
+                    {
+                        duration += m.DurationOfVacationPart;
+                    }
+                    add = @ViewBag.DurationOfVocation - duration;
+                }
+                <h6>Суммарная продолжительность отпуска: @duration дня(дней) </h6>
+                <h6>Необходимо ввести еще: @add </h6>
+            </div>
+
+            <div class="row col-md-6">
+                <div class="col-md-3">
+                    <input class="form-control col-md-3" type="date" name="dateStart" value="@Html.EditorFor(model => model.DateStart, DateTimeKind.Local)" />
+                <label style="color:crimson"> @Html.ValidationMessageFor(model => model.DateStart)</label>
+                </div>
+                <div class="col-md-3">
+                    <input class="form-control col-md-3" type="date" name="dateEnd" value="@Html.EditorFor(model => model.DateEnd, DateTimeKind.Local)" />
+                <label style="color:crimson"> @Html.ValidationMessageFor(model => model.DateEnd)</label>
+                    </div>
+            </div>
+            <label style="color:crimson"> @Html.ValidationMessageFor(model => model.DurationOfVacationPart)</label>
+            <h5 style="color:red">@ViewBag.ErrorMessage </h5>
+
+            <input class="col-md-6" type="submit" asp-action="CreatePartOfVacation" value="Добавить часть отпуска" />        
+        </div>
+    </div>
+}

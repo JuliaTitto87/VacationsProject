@@ -1,0 +1,19 @@
+﻿@model Employee
+
+@using System.Linq
+@using MyVacationsProject.Controllers
+@using Vacations_DomainModel.Models.Department
+@using Vacations_DomainModel.Models.Vacation
+
+<h2>Удаление работника</h2>
+@using (Html.BeginForm(
+actionName: nameof(EmployeesController.Delete),
+controllerName: Html.ViewContext.RouteData.Values["controller"].ToString(),
+FormMethod.Post))
+{
+    <h4>Работник @(Model.FullName) будет удален из списка</h4>
+
+    <div class="form-group">
+        <input type="submit" value="Удалить" class="btn btn-primary" />
+    </div>
+}

@@ -1,0 +1,49 @@
+﻿@using MyVacationsProject.Controllers
+@using Vacations_DomainModel.Models.Department
+@model List<Employee>
+<style type="text/css">
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    th, td {
+        width: 25%;
+    }
+
+    .tdd {
+        width: auto;
+    }</style>
+<div>
+    <h2>Список работников </h2>
+    <table>
+        <tr>
+            <td><p>  Табельный номер  </p></td>
+            <td><p>  ФИО  </p></td>
+            <td><p>  Подразделение  </p></td>
+            <td><p>  Должность  </p></td>
+            <td><p>  </p></td>
+            <td><p>  </p></td>
+            <td><p>  </p></td>
+        </tr>
+
+        @foreach (var m in Model)
+        {
+            <tr>
+
+                <td><p>@m.PersonnelNumber</p></td>
+                <td><p>@m.FullName</p></td>
+                <td><p>@m.Department.Name</p></td>
+                <td><p>@m.EmployeesPosition</p></td>
+                <td><p><a href="@Url.Action(nameof(EmployeesController.Edit))/@m.Id"> Изменить </a></p></td>
+                <td><p><a href="@Url.Action(nameof(EmployeesController.Delete))/@m.Id"> Удалить </a></p></td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div style="display:block">
+    <button class="nav-item">
+        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Зарегистрировать нового работника</a>
+    </button>
+</div>

@@ -1,0 +1,95 @@
+﻿@using MyVacationsProject.Controllers
+@using Vacations_DomainModel.Models.Department
+@using Vacations_DomainModel.Models.Vacation
+@model VacationsViewModel
+<style type="text/css">
+    table {
+        .green{background-color:lightskyblue}
+        table-layout: fixed;
+        width: 100%;}
+    th {
+        width: 25%;
+    }
+
+    .tdd {
+        width: auto;
+    }
+         .brd {
+        border: 1px;
+        padding: 10px;
+        color:dodgerblue;}
+    </style>
+    <!DOCTYPE html/>
+
+    <div class="container">    
+        @if(User.IsInRole("Administrator")||User.IsInRole("Timekeeper"))
+        {
+        <ul>
+            <li> <a class="col-md-6" href="@Url.Action(nameof(EmployeesController.Index), "Employees")">Редактировать список работников</a></li>
+            <li><a class="col-md-6" href="@Url.Action(nameof(DepartmentController.Index), "Department")">Редактировать список отделов</a></li>
+        </ul>
+        }
+        <div class="col-md-12 row" > <h3 class="col-md-4">Ваш отдел:  @Model.Department.Name</h3>
+            <a class="col-md-8 btn btn-lg btn-primary" href="@Url.Action(nameof(VacationsController.Create))/Model.EmployeeId"> Зарегистрировать отпуск </a>
+        </div>
+
+
+<form method="get" >
+        <div class="col-md-3 brd " style="border:solid">
+            <h6 style="color:dodgerblue"> Выберите отображаемый период </h6>
+    <div class="row">
+        <h5  class="col-md-4" style="color:black"> Месяц: </h5>
+        <div class="col-md-6"> @Html.DropDownList(("month"), Model.Months as SelectList, Model.Month, new {@class="form-control"} )</div>
+    </div>
+    <div class="row">
+        <h5 class="col-md-4" style="color:black"> Год:</h5>
+      <div class="col-md-6"> <input class="form-control" @Html.Editor("year", Model.Year ) </div>
+    </div>
+    <input class="col-md-12 btn btn-lg btn-primary mt-4" type="submit" value="Выбор" />
+   </div>
+</form>
+</div>
+
+
+<div>
+    <table>
+        <tr>
+            <td width="200"><h5> Имя работника </h5></td>
+            @for (int d=1; d<=DateTime.DaysInMonth(Model.Year, DateTime.ParseExact(Model.Month, "MMMM", System.Globalization.CultureInfo.CurrentCulture).Month); d++)
+            {
+                <td>
+                    <h5>@d</h5>
+                </td>
+            }
+        </tr>
+        @foreach(Employee employee in Model.Employees)
+        {
+            <tr>
+                <td class="tdd"><h5>@employee.FullName</h5></td>
+                @{
+                    int m = DateTime.ParseExact(Model.Month, "MMMM", System.Globalization.CultureInfo.CurrentCulture).Month;
+                }
+                @for (int d=1; d<=DateTime.DaysInMonth(Model.Year, m); d++)
+                {
+                    <td>
+                        @if (employee.Vacations != null)
+                        {
+                            @foreach (Vacation vacation in employee.Vacations)
+                            {
+                                @foreach (PartOfVacation partOfVacation in vacation.PartsOfVacation)
+                                {
+                                    @if (new DateTime(Model.Year, m, d) >= partOfVacation.DateStart &&
+                                                                  new DateTime(Model.Year, m, d) <= partOfVacation.DateEnd)
+                                    {
+                                        <p class="green"><label style="color:lightskyblue" > r </label></p>
+
+                                    }
+                                }
+                                }
+                                }
+                                </td>
+                                }
+                                </tr>
+                                }
+                                </table>
+                                </div>

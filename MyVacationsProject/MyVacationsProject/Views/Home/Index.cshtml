@@ -1,0 +1,20 @@
+﻿@using MyVacationsProject.Controllers
+@{
+    ViewData["Title"] = "Home Page";
+    var CurrentUserName = ViewBag.CurrentUserEmail;
+}    
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    <h1 class="display-4">Добро пожаловать в сервис учета отпусков</h1>
+    <fieldset>
+        @if (CurrentUserName == null)
+        {
+            <h1> <a href="Identity/Account/Pages/Login">Войти</a></h1>
+        }
+        <a href="@Url.Action(nameof(EmployeesController.Index), "Employees")"><p>List of employees<p></a>
+        <a href="@Url.Action(nameof(DepartmentController.Index), "Department")"><p>List of departments<p></a>
+        <a href="@Url.Action(nameof(VacationsController.Index), "Vacations")"><p>List of vacations<p></a>
+    </fieldset>
+</div>

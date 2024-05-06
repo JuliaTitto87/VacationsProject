@@ -1,0 +1,56 @@
+﻿@using MyVacationsProject.Controllers
+@model EmployeeViewModel
+
+<h2>Добавление нового работника</h2>
+@using (Html.BeginForm(
+actionName: nameof(EmployeesController.Create),
+controllerName: Html.ViewContext.RouteData.Values["controller"].ToString(),
+FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.UserId)
+    <div>
+        <div>
+            <label style="width:200px"> Имя работника</label>
+            @Html.EditorFor(model => model.FirstName)
+            <label style="color:crimson"> @Html.ValidationMessageFor(model => model.FirstName)</label>
+
+        </div>
+        <div>
+            <label style="width:200px"> Фамилия работника</label>
+            @Html.EditorFor(model => model.LastName)
+            <label style="color:crimson"> @Html.ValidationMessageFor(model => model.LastName)</label>
+        </div>
+
+        <div>
+            <label style="width:200px"> Табельный номер </label>
+            @Html.EditorFor(model => model.PersonnelNumber)
+            <label style="color:crimson"> @Html.ValidationMessageFor(model => model.PersonnelNumber)</label>
+        </div>
+
+        <div>
+            <label style="width:200px"> Должность </label>
+            @Html.EditorFor(model => model.EmployeesPosition)
+            <label style="color:crimson"> @Html.ValidationMessageFor(model => model.EmployeesPosition)</label>
+        </div>
+        <div>
+            <label style="width:200px"> Отдел </label>
+            @Html.DropDownListFor(Model => Model.DepartmentId, ViewBag.Departments as SelectList)
+            <label style="color:crimson"> @Html.ValidationMessageFor(model => model.DepartmentId)</label>
+        </div>
+
+        <div>
+            <label style="width:200px"> Продолжительность отпуска </label>
+            @Html.EditorFor(model => model.CurrentDurationOfVocation)
+            <label style="color:crimson"> @Html.ValidationMessageFor(model => model.CurrentDurationOfVocation)</label>
+        </div>
+
+        <div>
+            <label type="checkbox"> @Html.EditorFor(model => model.IsHeadOfDepartment)</label>
+            <label> Является руководителем подразделения </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Создать работника"  class="btn btn-primary" />
+    </div>
+}

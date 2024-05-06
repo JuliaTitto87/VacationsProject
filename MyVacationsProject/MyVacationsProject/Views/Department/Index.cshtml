@@ -1,0 +1,53 @@
+﻿@using MyVacationsProject.Controllers
+@using Vacations_DomainModel.Models.Department
+@model List<Department>
+<style type="text/css">
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    th, td {
+        width: 25%;
+    }
+
+    .tdd {
+        width: auto;
+    }</style>
+<div>
+    <h2>Список работников </h2>
+    <table>
+        <tr>
+            <td><p>  Наименование  </p></td>
+            <td><p>  ФИО начальника </p></td>
+            <td><p>    </p></td>
+            <td><p>   </p></td>
+        </tr>
+
+        @foreach (var m in Model)
+        {
+            <tr>
+
+                <td><p>@m.Name</p></td>
+                <td>
+                    @if ((m.Employees.FirstOrDefault(employee => employee.IsHeadOfDepartment == true)) != null)
+                    {
+                        <p>
+                            @m.Employees.FirstOrDefault(employee => employee.IsHeadOfDepartment == true).FullName
+                        </p>
+                    }
+                    else
+                    {
+                        <p style="color: red"> !Требуется указать начальника подразделения!</p>
+                    }
+                </td>
+                <td><p><a href="@Url.Action(nameof(DepartmentController.Edit))/@m.Id"> Изменить </a></p></td>
+                <td><p><a href="@Url.Action(nameof(DepartmentController.Delete))/@m.Id"> Удалить </a></p></td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div style="display:block">
+    <a href="@Url.Action(nameof(DepartmentController.Create))"> Добавить подразделение </a>
+</div>
